@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+      parameters {
+        string(name: 'coursename', defaultValue: 'Devops', description: 'add a course here')
+      }
+
+    stages {
+        stage('print') {
+            steps {
+                echo 'Hello world! welcome to ${params.coursename}'
+            }
+        }
+        stage('checkout') {
+            checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Pravali0710/jenkins-git-integration.git']])
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean verify'
+            }
+    
+        }
+
+         post { 
+        always { 
+            echo 'Thanks for running the job'
+        }
+    }
+    }
+
+}
